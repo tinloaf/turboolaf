@@ -3,7 +3,10 @@
 import json
 import time
 import datetime
+import curses
+import curses.textpad
 import optparse
+import sys
 
 from decimal import Decimal
 import uuid
@@ -24,6 +27,69 @@ def get_qif(invoice):
     qif += "MBierminister Verkauf\n"
     qif += "^"
     return qif
+
+win = None
+list_win = None
+def update_screen(message):
+    global win
+    global list_win
+    
+    # Update list.
+    list_win.clear()
+    list_win.box()
+    maxyx = win.getmaxyx()
+    line = 1
+    grand_total = Decimal('0.0')
+    for code, product in invoice.items():
+        if product["quantity"] > 0:
+            # Quantity
+            list_win.addstr(line, 2, "%02d" % (product["quantity"]))
+            # Name
+            list_win.addstr(line, 5, "x %s" % (product['name']))
+            # Price
+            price = Decimal(str(product['price']))
+            total_item = price * product["quantity"]
+            grand_total += total_item
+            list_win.addstr(line, (list_win.getmaxyx()[1] - 20), "%s € (%s €)" % (total_item, price))        
+        
+            line += 1
+
+    # Display message
+    win.addstr(2, 1, " " * (maxyx[1] - 2))
+    win.addstr(2, 2, message)
+
+    # Display grand total
+    win.addstr(maxyx[0] - 7, maxyx[1] - 40, "Grand Total: %s €" % (grand_total))
+
+    # Postition the cursor
+    win.move(2,2)
+    curses.setsyx(2,2)
+    
+    list_win.refresh()
+    win.refresh()
+    
+def init_screen():
+    global win
+    global list_win
+    win = curses.initscr()
+    curses.echo()
+    # Kein line-buffer
+    #curses.cbreak()
+    
+    # Farben
+    curses.start_color()
+    curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLUE)
+    curses.init_pair(2, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+ 
+    # Hintergrundfarben
+    win.bkgd(curses.color_pair(1))
+    win.box()
+    maxyx = win.getmaxyx()
+
+    list_win = win.subwin(maxyx[0]-10, maxyx[1], 3, 0)
+    list_win.box()
+
+    update_screen("Welcome to TurboOlaf!")
 
 # add a --file argument and parse the arguments
 parser = optparse.OptionParser()
@@ -46,8 +112,13 @@ print(invoice)
 for code, product in invoice.items():
     product["quantity"] = 0
 
+##### UI Operations #####
+init_screen()
+    
 while True:
-    product_code = input("Product code:")
+    product_code = str(win.getstr(0,0))[2:-1] # yeah. don't ask. conversion fuckup.
+    
+    #product_code = input("Product code:")
 
     # end if an empty product code was given
     if not product_code:
@@ -68,8 +139,13 @@ while True:
         else:
             try:
                 invoice[product_code]["quantity"] += 1
+                update_screen("Added product '%s'" % (invoice[product_code]['name']))
             except:
-                print("No such product!")
+                update_screen("No such product: '%s'!" % (product_code))
+
+
+curses.endwin()
+                   
 
 invoice_string = ""
 invoice_string += "*" * INVOICE_WIDTH + "\n"

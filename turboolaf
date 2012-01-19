@@ -32,9 +32,49 @@ def get_qif(invoice):
     qif += "^"
     return qif
 
+### START OF UI OPERATIONS ###
 win = None
 list_win = None
-def update_screen(message):
+def get_input(break_char_str="\n", break_chars=[]):
+    buf = ""
+    while True:
+        ch = win.getch(1,(2+len(buf)))
+
+        # Control sequences
+        if (ch == 0x1B): # ESC
+            ch = win.getch(1,(2+len(buf)))
+            if (ch == 0x5B): # [
+                ch = win.getch(1,(2+len(buf)))
+                update_screen("", buf)
+                return (None, ch)
+        
+        if ((len(buf) == 0) and ((chr(ch) in break_char_str) or (ch in break_chars))):
+            # Special command
+            return (buf, ch)
+        if (ch == 0x0A):
+            # Line feed. Return buffer
+            return (buf, ch)
+        if ((ch > 0x1F) and (ch < 0x7F)):
+            buf += chr(ch)
+        if (ch == 0x7F): # Backspace
+            buf = buf[:-1]
+
+        update_screen("", buf)
+
+product_times = {}
+def get_product_by_position(pos):
+    pos_list = sorted(product_times.items(), key = lambda item: item[1], reverse = True)
+
+    if pos >= len(pos_list):
+        return None
+    else:
+        return pos_list[pos][0]
+
+def update_product(product_code, delta):
+    invoice[product_code]["quantity"] += delta
+    product_times[product_code] = time.time()
+    
+def update_screen(message, input="", highlight_line=-1):
     global win
     global list_win
     
@@ -44,23 +84,38 @@ def update_screen(message):
     maxyx = win.getmaxyx()
     line = 1
     grand_total = Decimal('0.0')
-    for code, product in invoice.items():
-        if product["quantity"] > 0:
-            # Quantity
-            list_win.addstr(line, 2, "%02d" % (product["quantity"]))
-            # Name
-            list_win.addstr(line, 5, "x %s" % (product['name']))
-            # Price
-            price = Decimal(str(product['price']))
-            total_item = price * product["quantity"]
-            grand_total += total_item
-            list_win.addstr(line, (list_win.getmaxyx()[1] - 20), "%s € (%s €)" % (total_item, price))        
+    code = get_product_by_position(line-1)
+    while code != None:
+        product = invoice[code]
+        if (line == highlight_line):
+            color = curses.color_pair(2)
+        else:
+            color = curses.color_pair(1)
+
+        # Background
+        list_win.addstr(line, 2, " " * (list_win.getmaxyx()[1] - 4), color)
+                
+        # Quantity
+        list_win.addstr(line, 2, "%02d" % (product["quantity"]), color)
+        # Name
+        list_win.addstr(line, 5, "x %s" % (product['name']), color)
+        # Price
+        price = Decimal(str(product['price']))
+        total_item = price * product["quantity"]
+        grand_total += total_item
+
+        list_win.addstr(line, (list_win.getmaxyx()[1] - 20), "%s € (%s €)" % (total_item, price),  color)
         
-            line += 1
+        line += 1
+        code = get_product_by_position(line-1)
 
     # Display message
     win.addstr(2, 1, " " * (maxyx[1] - 2))
     win.addstr(2, 2, message)
+
+    # Current input
+    win.addstr(1, 1, " " * (maxyx[1] - 2))
+    win.addstr(1, 2, input)    
 
     # Display grand total
     win.addstr(maxyx[0] - 7, maxyx[1] - 40, "Grand Total: %s €" % (grand_total))
@@ -71,6 +126,45 @@ def update_screen(message):
     
     list_win.refresh()
     win.refresh()
+
+def ui_select_mode():
+    global win
+    global list_win
+
+    line = 1
+    update_screen("-> Select mode. Press Enter to return. <-", highlight_line=line)
+    while True:
+        current_code = get_product_by_position((line - 1))
+        ch = win.getch(1,1)
+        if (ch == 0x0A): # RET
+            update_screen("Left Select mode")
+            return
+
+        # Quantity modification
+        if current_code != None:
+            product = invoice[current_code]
+            if (ch == 0x2B): # +
+                # We circumvent updating the timestamp here
+                product['quantity'] += 1
+            if (ch == 0x2D): # -
+                product['quantity'] -= 1
+            
+        # Control sequences
+        if (ch == 0x1B): # ESC
+            ch = win.getch(1,1)
+            if (ch == 0x5B): # [
+                ch = win.getch(1,1)
+
+                if ch == 66: # UP
+                    line += 1
+                    if (line > len(product_times)):
+                        line = len(product_times)
+                if ch == 65: # DOWN
+                    line -= 1
+                    if (line < 1):
+                        line = 1
+        
+        update_screen("-> Select mode. Press Enter to return. <-", highlight_line=line)
     
 def init_screen():
     global win
@@ -94,6 +188,8 @@ def init_screen():
     list_win.box()
 
     update_screen("Welcome to TurboOlaf!")
+
+### END OF UI OPERATIONS ###
     
 def get_invoice_ascii(invoice, width=60):
     invoice_string = ""
@@ -144,64 +240,83 @@ init_screen()
     
 previous_product_code = None
 while True:
-    entered = str(win.getstr(1,1))[2:-1] # yeah. don't ask. string conversion fuckup.
+    (entered, break_ch) = get_input("+-", [curses.KEY_UP, curses.KEY_DOWN])
 
-    # end if an input was given
-    if not entered:
-        break
-    else:
-        if entered[0] == '$':
-            # the input is a Sonderposten
-            try:
-                special_product = {}
-                special_id = str(uuid.uuid4())
-                invoice[special_id]['quantity'] = 1
-                try:
-                    special_name = entered[1:].split(' ')[1]
-                except IndexError:
-                    special_name = "Sonderposten"
-                special_product['name'] = special_name
-                special_product['price'] = Decimal(entered[1:].split(' ')[0])
-                previous_product_code = special_id
-                # only if nothing of the above failed, write the above
-                invoice.update({
-                    special_id: special_product
-                    })
-            except:
-                update_screen("Invalid Sonderposten format!")
+    if break_ch == ord('\n'):    
+        # end if an input was given
+        if not entered:
+            break
         else:
-            # the input is not a Sonderposten
-            if entered[0] in string.ascii_letters:
-                # the input starts with a letter and will be followed by a product id
-                previous_product_code = None
-                for code, product in invoice.items():
-                    if code == entered[1:]:
-                        previous_product_code = code
-                        product["quantity"] += 1
-                        update_screen("Added " + invoice[code]["name"])
-                if not previous_product_code:                    
-                    update_screen("Invalid product code " + entered[1:] + " entered")
+            if entered[0] == '$':
+                # the input is a Sonderposten
+                try:
+                    special_product = {}
+                    special_id = str(uuid.uuid4())
+                    update_product(special_id, 1)
+                    #invoice[special_id]['quantity'] = 1
+                    try:
+                        special_name = entered[1:].split(' ')[1]
+                    except IndexError:
+                        special_name = "Sonderposten"
+                        special_product['name'] = special_name
+                        special_product['price'] = Decimal(entered[1:].split(' ')[0])
+                        previous_product_code = special_id
+                # only if nothing of the above failed, write the above
+                        invoice.update({
+                                special_id: special_product
+                                })
+                except:
+                    update_screen("Invalid Sonderposten format!")
             else:
-                if len(entered) > 10:
-                    # a code was scanned
+                # the input is not a Sonderposten
+                if entered[0] in string.ascii_letters:
+                    # the input starts with a letter and will be followed by a product id
+                    previous_product_code = None
                     for code, product in invoice.items():
-                        if code == entered:
+                        if code == entered[1:]:
                             previous_product_code = code
-                            product["quantity"] += 1
-                            update_screen("Scanned " + invoice[code]["name"])
-                            
+                            update_product(code, 1)
+                            update_screen("Added " + invoice[code]["name"])
+                    if not previous_product_code:                    
+                        update_screen("Invalid product code " + entered[1:] + " entered")
                 else:
-                    # a quantity was entered
-                    if previous_product_code:
-                        try:
-                            invoice[previous_product_code]["quantity"] += int(entered) - 1
-                            update_screen("Added another " + str(int(entered) - 1) + " " + invoice[previous_product_code]["name"])
-                            previous_product_code = None
-                        except ValueError:
-                            update_screen("No valid quantity entered")
+                    if len(entered) > 10:
+                        # a code was scanned
+                        for code, product in invoice.items():
+                            if code == entered:
+                                previous_product_code = code
+                                update_product(code, 1)
+                                update_screen("Scanned " + invoice[code]["name"])
+                            
                     else:
-                        update_screen("No previous product entered!")
-
+                        # a quantity was entered
+                        if previous_product_code:
+                            try:
+                                update_product(previous_product_code, int(entered) - 1)
+                                update_screen("Added another " + str(int(entered) - 1) + " " + invoice[previous_product_code]["name"])
+                            except ValueError:
+                                update_screen("No valid quantity entered")
+                        else:
+                            update_screen("No previous product entered!")
+    else: # Hardcore shortcut action
+        if (entered == None): # CTRL-Sequence
+            if (break_ch == 65) or (break_ch == 66): # Up, Down
+                ui_select_mode()
+                
+        if (break_ch == 0x2B) or (break_ch == 0x2D): # + / -
+            if previous_product_code:
+                try:
+                    if (break_ch == 0x2B):
+                        delta = 1
+                    else:
+                        delta = -1
+                    update_product(previous_product_code, delta)
+                    update_screen("Modified " + invoice[previous_product_code]["name"] + " by " + str(delta))
+                except ValueError:
+                    update_screen("No valid quantity entered")
+            else:
+                update_screen("No previous product entered!")
+            
 curses.endwin()
 
 print(get_invoice_ascii(invoice))

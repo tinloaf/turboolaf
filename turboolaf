@@ -39,6 +39,7 @@ def get_input(break_char_str="\n", break_chars=[]):
     buf = ""
     while True:
         ch = win.getch(1,(2+len(buf)))
+        need_full_update = True
 
         # Control sequences
         if (ch == 0x1B): # ESC
@@ -55,12 +56,20 @@ def get_input(break_char_str="\n", break_chars=[]):
             # Line feed. Return buffer
             return (buf, ch)
         if ((ch > 0x1F) and (ch < 0x7F)):
+            # Don't update the whole screen
+            need_full_update = False
             buf += chr(ch)
         if (ch == 0x7F): # Backspace
             buf = buf[:-1]
 
-        update_screen("", buf)
-
+        if need_full_update:
+            update_screen("", buf)
+        else:
+            # Just write the first line again
+            maxyx = win.getmaxyx()
+            win.addstr(1, 1, " " * (maxyx[1] - 2))
+            win.addstr(1, 2, buf)    
+            
 product_times = {}
 def get_product_by_position(pos):
     pos_list = sorted(product_times.items(), key = lambda item: item[1], reverse = True)

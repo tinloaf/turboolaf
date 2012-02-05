@@ -1,462 +1,457 @@
 {
-    "kasten_saft": {
-        "alias": [
-            "w1"
-        ], 
-        "dependencies": [
-            {
-                "id": "kasten_standard"
-            }, 
-            {
-                "id": "flasche_saft", 
-                "quantity": 6
-            }
-        ], 
-        "name": "Saftkasten 6x1l"
-    }, 
-    "flasche_sprudel": {
-        "alias": [
-            "w2"
-        ], 
-        "price": 0.08, 
-        "name": "Sprudelflasche 0,7l"
-    }, 
-    "kasten_bier_mit_24_03": {
-        "alias": [
-            "w3"
-        ], 
-        "dependencies": [
-            {
-                "id": "kasten_standard"
-            }, 
-            {
-                "id": "flasche_bier", 
-                "quantity": 24
-            }
-        ], 
-        "name": "Bierkasten mit 24 0,3l Flaschen"
-    }, 
-    "flasche_bier": {
-        "alias": [
-            "fb03", 
-            "w4"
-        ], 
-        "price": 0.08, 
-        "name": "Bierflasche"
-    }, 
-    "kasten_wiesentahler_grapefruit": {
-        "alias": [
-            "w5"
-        ], 
-        "price": 5.7, 
-        "dependencies": [
-            {
-                "id": "kasten_sprudel"
-            }
-        ], 
-        "name": "Wiesentahler Grapefruidlimo (12x0,7l))"
-    }, 
-    "kasten_maisels": {
-        "alias": [
-            "w6"
-        ], 
-        "price": 15, 
-        "dependencies": [
-            {
-                "id": "kasten_bier_mit_20_05"
-            }
-        ], 
-        "name": "Maisels Weizen (20x0,5l)"
-    }, 
-    "kasten_kraeusen": {
-        "alias": [
-            "w7"
-        ], 
-        "price": 15, 
-        "dependencies": [
-            {
-                "id": "kasten_bier_mit_20_05"
-            }
-        ], 
-        "name": "Hoepfner Kr\u00e4usen (20x0,5l)"
-    }, 
-    "kasten_zaepfle": {
-        "alias": [
-            "zaepfle", 
-            "w8"
-        ], 
-        "price": 15.5, 
-        "dependencies": [
-            {
-                "id": "kasten_bier_mit_24_03"
-            }
-        ], 
-        "name": "Rothaus Tannenz\u00e4pfle (24x0,3l)"
-    }, 
-    "kasten_becks": {
-        "alias": [
-            "w9"
-        ], 
-        "price": 15.5, 
-        "dependencies": [
-            {
-                "id": "kasten_bier_mit_24_03"
-            }
-        ], 
-        "name": "Becks (24x0,3l)"
-    }, 
-    "kasten_cola_10": {
-        "alias": [
-            "w10"
-        ], 
-        "price": 11.5, 
-        "dependencies": [
-            {
-                "id": "kasten_cola_12_10"
-            }
-        ], 
-        "name": "Coca-Cola (12x1l)"
-    }, 
-    "kasten_wiesentahler_gruen": {
-        "alias": [
-            "w11"
-        ], 
-        "price": 3.4, 
-        "dependencies": [
-            {
-                "id": "kasten_sprudel"
-            }
-        ], 
-        "name": "Wiesentahler Sprudel(gr\u00fcn) (12x0,7l))"
-    }, 
-    "kasten_kumpf_orange": {
-        "alias": [
-            "w12"
-        ], 
-        "price": 9, 
-        "dependencies": [
-            {
-                "id": "kasten_saft"
-            }
-        ], 
-        "name": "Kumpf Orangensaft (6x1l)"
-    }, 
-    "kasten_granini_maracuja": {
-        "alias": [
-            "w13"
-        ], 
-        "price": 13.4, 
-        "dependencies": [
-            {
-                "id": "kasten_saft"
-            }
-        ], 
-        "name": "Granini Maracuja (6x1l)"
-    }, 
-    "kasten_cola_15": {
-        "alias": [
-            "w14"
-        ], 
-        "price": 13, 
-        "dependencies": [
-            {
-                "id": "kasten_cola_10_15"
-            }
-        ], 
-        "name": "Coca-Cola (10x1,5l)"
-    }, 
-    "kasten_granini_kirsche": {
-        "alias": [
-            "w15"
-        ], 
-        "price": 14, 
-        "dependencies": [
-            {
-                "id": "kasten_saft"
-            }
-        ], 
-        "name": "Granini Kirschsaft (6x1l)"
-    }, 
-    "kasten_granini_banane": {
-        "alias": [
-            "w16"
-        ], 
-        "price": 11.5, 
-        "dependencies": [
-            {
-                "id": "kasten_saft"
-            }
-        ], 
-        "name": "Granini Bananennektar (6x1l)"
-    }, 
-    "kasten_wiesentahler_oragne": {
-        "alias": [
-            "w17"
-        ], 
-        "price": 4.6, 
-        "dependencies": [
-            {
-                "id": "kasten_sprudel"
-            }
-        ], 
-        "name": "Wiesentahler Orangenlimonade (12x0,7l))"
-    }, 
-    "fass": {
-        "alias": [
-            "w18"
-        ], 
-        "price": 30, 
-        "name": "Fasspfand"
-    }, 
-    "kasten_cola_10_15": {
-        "alias": [
-            "w19"
-        ], 
-        "dependencies": [
-            {
-                "id": "kasten_standard"
-            }, 
-            {
-                "id": "flasche_cola", 
-                "quantity": 10
-            }
-        ], 
-        "name": "Cola-Kasten 10x1,5l"
-    }, 
-    "kasten_bier_mit_24_03_pfandrueckgabe": {
-        "alias": [
-            "w20"
-        ], 
-        "dependencies": [
-            {
-                "id": "kasten_bier_mit_24_03", 
-                "quantity": -1
-            }
-        ], 
-        "name": "Pfandr\u00fcckgabe Bierkasten mit 24 0,3l Flaschen"
-    }, 
     "kasten_standard": {
         "alias": [
-            "ka", 
-            "213413241234", 
-            "w21"
-        ], 
-        "price": 1.5, 
-        "name": "Standard Plastikkasten"
-    }, 
-    "kasten_wiesentahler_cola": {
+            "ka",
+            "213413241234",
+            "kasten"
+        ],
+        "name": "Standard Plastikkasten",
+        "price": 1.5
+    },
+    "flasche_bier": {
+        "name": "Bierflasche",
+        "price": 0.08,
         "alias": [
-            "w22"
-        ], 
-        "price": 5.3, 
+            "fb03",
+            "bierflasche"
+        ]
+    },
+    "kasten_bier_mit_24_03": {
+        "name": "Bierkasten mit 24 0,3l Flaschen",
         "dependencies": [
             {
-                "id": "kasten_sprudel"
+                "id": "kasten_standard"
+            },
+            {
+                "id": "flasche_bier",
+                "quantity": 24
             }
-        ], 
-        "name": "Wiesentahler ColaMix (12x0,7l))"
-    }, 
-    "kasten_wiesentahler_zitrone": {
+        ],
         "alias": [
-            "w23"
-        ], 
-        "price": 4.6, 
+          "bierkasten24"
+        ]
+    },
+    "kasten_bier_mit_20_05": {
+        "name": "Bierkasten 20x0,5l",
+        "alias": ["bierkasten20"],
         "dependencies": [
             {
-                "id": "kasten_sprudel"
+                "id": "kasten_standard"
+            },
+            {
+                "id": "flasche_bier",
+                "quantity": 20
             }
-        ], 
-        "name": "Wiesentahler Zitronenlimonade (12x0,7l))"
-    }, 
-    "kasten_apfel": {
-        "alias": [
-            "w24"
-        ], 
-        "price": 4.7, 
+        ]
+    },
+    "kasten_cola_10_15": {
+        "name": "Cola-Kasten 10x1,5l",
+        "alias": ["colakasten10"],
         "dependencies": [
             {
-                "id": "kasten_saft"
+                "id": "kasten_standard"
+            },
+            {
+                "id": "flasche_cola",
+                "quantity": 10
             }
-        ], 
-        "name": "Apfelsaft (6x1l)"
-    }, 
+        ]
+    },
+    "kasten_cola_12_10": {
+        "name": "Cola-Kasten 12x1l",
+        "alias": ["colakasten12"],
+        "dependencies": [
+            {
+                "id": "kasten_standard"
+            },
+            {
+                "id": "flasche_cola",
+                "quantity": 12
+            }
+        ]
+    },
+    "kasten_saft": {
+        "name": "Saftkasten 6x1l",
+        "alias": ["saftkasten", "saftkasten6"],
+        "dependencies": [
+            {
+                "id": "kasten_standard"
+            },
+            {
+                "id": "flasche_saft",
+                "quantity": 6
+            }
+        ]
+    },
+    "kasten_sprudel": {
+        "name": "Sprudelkasten 12x0,7l",
+        "alias": ["sprudelkasten", "sprudelkasten12"],
+        "dependencies": [
+            {
+                "id": "kasten_standard"
+            },
+            {
+                "id": "flasche_sprudel",
+                "quantity": 12
+            }
+        ]
+    },
+    "kasten_bier_mit_24_03_pfandrueckgabe": {
+        "name": "Pfandrückgabe Bierkasten mit 24 0,3l Flaschen",
+        "alias": ["pfandbierkasten24", "p24"],
+        "dependencies": [
+            {
+                "id": "kasten_bier_mit_24_03",
+                "quantity": -1
+            }
+        ]
+    },
+    "kasten_bier_mit_20_05_pfandrueckgabe": {
+        "name": "Pfandrückgabe Bierkasten mit 22 0,5l Flaschen",
+        "alias": ["pfandbierkasten20", "p20"],
+        "dependencies": [
+            {
+                "id": "kasten_bier_mit_20_05",
+                "quantity": -1
+            }
+        ]
+    },
+    "kasten_sprudel_pfandrueckgabe": {
+        "name": "PfandrÃ¼ckgabe Sprudelkasten",
+        "alias": ["pfandsprudelkasten", "psp"],
+        "dependencies": [
+            {
+                "id": "kasten_sprudel",
+                "quantity": -1
+            }
+        ]
+    },
+    "kasten_cola_10_15_pfandrueckgabe": {
+        "name": "PfandrÃ¼ckgabe Cola (10x1,5l)",
+        "alias": ["pfandcola10", "pc10"],
+        "dependencies": [
+            {
+                "id": "kasten_cola_10_15",
+                "quantity": -1
+            }
+        ]
+    },
+    "kasten_cola_12_10_pfandrueckgabe": {
+        "name": "PfandrÃ¼ckgabe Cola (12x1l)",
+        "alias": ["pfandcola12", "pc12"],
+        "dependencies": [
+            {
+                "id": "kasten_cola_12_10",
+                "quantity": -1
+            }
+        ]
+    },
+    "kasten_saft_pfandrueckgabe": {
+        "name": "PfandrÃ¼ckgabe Saftkasten",
+        "alias": ["pfandsaftkasten", "psa"],
+        "dependencies": [
+            {
+                "id": "kasten_saft",
+                "quantity": -1
+            }
+        ]
+    },
+    "4015345930000": {
+        "name": "Waldhaus (24x0,3l)",
+        "alias": ["waldhaus"],
+        "price": 16,
+        "dependencies": [
+            {
+                "id": "kasten_bier_mit_24_03"
+            }
+        ]
+    },
+    "kasten_zaepfle": {
+        "name": "Rothaus Tannenzäpfle (24x0,3l)",
+        "alias": ["zaepfle", "zäpfle", "41051825"],
+        "price": 13.5,
+        "dependencies": [
+            {
+                "id": "kasten_bier_mit_24_03"
+            }
+        ]
+    },
+    "41001301": {
+        "name": "Becks (24x0,3l)",
+        "alias": ["becks"],
+        "price": 15.5,
+        "dependencies": [
+            {
+                "id": "kasten_bier_mit_24_03"
+            }
+        ]
+    },
+    "4008109432308": {
+        "name": "Hoepfner Grape (24x0,3l)",
+        "price": 15.5,
+        "alias": ["grape"],
+        "dependencies": [
+            {
+                "id": "kasten_bier_mit_24_03"
+            }
+        ]
+    },
+    "4008109340504": {
+        "name": "Hoepfner Kräusen (20x0,5l)",
+        "price": 15,
+        "alias": ["kraeusen", "kräusen"],
+        "dependencies": [
+            {
+                "id": "kasten_bier_mit_20_05"
+            }
+        ]
+    },
+    "kasten_maisels": {
+        "name": "Maisels Weizen (20x0,5l)",
+        "alias": ["maisels"],
+        "price": 15,
+        "dependencies": [
+            {
+                "id": "kasten_bier_mit_20_05"
+            }
+        ]
+    },
+    "4002103000013": {
+        "name": "Erdinger Weizen hell (20x0,5l)",
+        "alias": ["erdingerhell"],
+        "price": 15.50,
+        "dependencies": [
+            {
+                "id": "kasten_bier_mit_20_05"
+            }
+        ]
+    },
+    "4002103000037": {
+        "name": "Erdinger Weizen dunkel (20x0,5l)",
+        "alias": ["erdingerdunkel"],
+        "price": 15.50,
+        "dependencies": [
+            {
+                "id": "kasten_bier_mit_20_05"
+            }
+        ]
+    },
     "fass_rothaus": {
-        "alias": [
-            "w25"
-        ], 
-        "price": 52, 
+        "name": "Rothaus Pils 30l",
+        "price": 52,
         "dependencies": [
             {
                 "id": "fass"
             }
-        ], 
-        "name": "Rothaus Pils 30l"
-    }, 
-    "kasten_grape": {
-        "alias": [
-            "w26"
-        ], 
-        "price": 15.5, 
+        ]
+    },
+    "5449000050519": {
+        "name": "Coca-Cola (10x1,5l)",
+        "alias": ["cola10"],
+        "price": 13,
         "dependencies": [
             {
-                "id": "kasten_bier_mit_24_03"
+                "id": "kasten_cola_10_15"
             }
-        ], 
-        "name": "Hoepfner Grape (24x0,3l)"
-    }, 
-    "kasten_wiesentahler_blau": {
-        "alias": [
-            "w27"
-        ], 
-        "price": 3.4, 
-        "dependencies": [
-            {
-                "id": "kasten_sprudel"
-            }
-        ], 
-        "name": "Wiesentahler Sprudel(blau) (12x0,7l))"
-    }, 
-    "kasten_wiesentahler_apfelschorle": {
-        "alias": [
-            "w28"
-        ], 
-        "price": 6.2, 
-        "dependencies": [
-            {
-                "id": "kasten_sprudel"
-            }
-        ], 
-        "name": "Wiesentahler Apfelschorle (12x0,7l))"
-    }, 
-    "kasten_kumpf_Apfel_direkt": {
-        "alias": [
-            "w29"
-        ], 
-        "price": 8, 
-        "dependencies": [
-            {
-                "id": "kasten_saft"
-            }
-        ], 
-        "name": "Kumpf Apfel direkt (6x1l)"
-    }, 
-    "kasten_cola_12_10": {
-        "alias": [
-            "w30"
-        ], 
-        "dependencies": [
-            {
-                "id": "kasten_standard"
-            }, 
-            {
-                "id": "flasche_cola", 
-                "quantity": 12
-            }
-        ], 
-        "name": "Cola-Kasten 12x1l"
-    }, 
-    "kasten_orange": {
-        "alias": [
-            "w31"
-        ], 
-        "price": 6.5, 
-        "dependencies": [
-            {
-                "id": "kasten_saft"
-            }
-        ], 
-        "name": "Orangensaft (6x1l)"
-    }, 
-    "kasten_granini_ananas": {
-        "alias": [
-            "w32"
-        ], 
-        "price": 13.5, 
-        "dependencies": [
-            {
-                "id": "kasten_saft"
-            }
-        ], 
-        "name": "Granini Annanassaft (6x1l)"
-    }, 
-    "kasten_waldhaus": {
-        "alias": [
-            "w33"
-        ], 
-        "price": 16, 
-        "dependencies": [
-            {
-                "id": "kasten_bier_mit_24_03"
-            }
-        ], 
-        "name": "Waldhaus (24x0,3l)"
-    }, 
-    "flasche_cola": {
-        "alias": [
-            "w34"
-        ], 
-        "price": 0.15, 
-        "name": "Colaflasche"
-    }, 
-    "kasten_sprudel": {
-        "alias": [
-            "w35"
-        ], 
-        "dependencies": [
-            {
-                "id": "kasten_standard"
-            }, 
-            {
-                "id": "flasche_sprudel", 
-                "quantity": 12
-            }
-        ], 
-        "name": "Sprudelkasten 12x0,7l"
-    }, 
-    "kasten_bier_mit_20_05": {
-        "alias": [
-            "w36"
-        ], 
-        "dependencies": [
-            {
-                "id": "kasten_standard"
-            }, 
-            {
-                "id": "flasche_bier", 
-                "quantity": 20
-            }
-        ], 
-        "name": "Bierkasten 24x0,5l"
-    }, 
-    "kasten_kumpf_multi": {
-        "alias": [
-            "w37"
-        ], 
-        "price": 9.75, 
-        "dependencies": [
-            {
-                "id": "kasten_saft"
-            }
-        ], 
-        "name": "Kumpf Multivitamin (6x1l)"
-    }, 
-    "kasten_Fanta_10": {
-        "alias": [
-            "w38"
-        ], 
-        "price": 11.5, 
+        ]
+    },
+    "5449000017888": {
+        "name": "Coca-Cola (12x1l)",
+        "alias": ["cola12"],
+        "price": 11.5,
         "dependencies": [
             {
                 "id": "kasten_cola_12_10"
             }
-        ], 
-        "name": "Fanta (12x1l)"
-    }, 
+        ]
+    },
+    "5449000017918": {
+        "name": "Fanta (12x1l)",
+        "alias": ["fanta", "fanta12", "5449000017918"],
+        "price": 11.5,
+        "dependencies": [
+            {
+                "id": "kasten_cola_12_10"
+            }
+        ]
+    },
+    "kasten_kumpf_Apfel_direkt": {
+        "name": "Kumpf Apfel direkt (6x1l)",
+        "alias": ["apfelkasten"],
+        "price": 8,
+        "dependencies": [
+            {
+                "id": "kasten_saft"
+            }
+        ]
+    },
+    "kasten_kumpf_multi": {
+        "name": "Kumpf Multivitamin (6x1l)",
+        "alias": ["multikasten", "multivitaminkasten"],
+        "price": 9.75,
+        "dependencies": [
+            {
+                "id": "kasten_saft"
+            }
+        ]
+    },
+    "kasten_kumpf_orange": {
+        "name": "Kumpf Orangensaft (6x1l)",
+        "alias": ["orangenkasten"],
+        "price": 9,
+        "dependencies": [
+            {
+                "id": "kasten_saft"
+            }
+        ]
+    },
+    "kasten_granini_ananas": {
+        "name": "Granini Annanassaft (6x1l)",
+        "alias": ["ananaskasten"],
+        "price": 13.5,
+        "dependencies": [
+            {
+                "id": "kasten_saft"
+            }
+        ]
+    },
+    "4002160053120": {
+        "name": "Granini Bananennektar (6x1l)",
+        "alias": ["bananenkasten"],
+        "price": 11.5,
+        "dependencies": [
+            {
+                "id": "kasten_saft"
+            }
+        ]
+    },
+    "kasten_granini_kirsche": {
+        "name": "Granini Kirschsaft (6x1l)",
+        "alias": ["kirschkasten", "kirschekasten"],
+        "price": 14,
+        "dependencies": [
+            {
+                "id": "kasten_saft"
+            }
+        ]
+    },
+    "4002160053182": {
+        "name": "Granini Maracuja (6x1l)",
+        "alias": ["maracujakasten"],
+        "price": 13.4,
+        "dependencies": [
+            {
+                "id": "kasten_saft"
+            }
+        ]
+    },
+    "4035903001096": {
+        "name": "Wiesentahler Sprudel(blau) (12x0,7l))",
+        "alias": ["sprudelblau"],
+        "price": 3.4,
+        "dependencies": [
+            {
+                "id": "kasten_sprudel"
+            }
+        ]
+    },
+    "kasten_wiesentahler_gruen": {
+        "name": "Wiesentahler Sprudel(grün) (12x0,7l))",
+        "alias": ["sprudelgruen", "4035903002093"],
+        "price": 3.4,
+        "dependencies": [
+            {
+                "id": "kasten_sprudel"
+            }
+        ]
+    },
+    "4035903008095": {
+        "name": "Wiesentahler Zitronenlimonade (12x0,7l))",
+        "alias": ["zitrolimo", "zitronenlimo", "zitronenlimonade"],
+        "price": 4.6,
+        "dependencies": [
+            {
+                "id": "kasten_sprudel"
+            }
+        ]
+    },
+    "4035903004097": {
+        "name": "Wiesentahler Orangenlimonade (12x0,7l))",
+        "alias": ["olimo", "orangelimo", "orangenlimo", "orangenlimonade"],
+        "price": 4.6,
+        "dependencies": [
+            {
+                "id": "kasten_sprudel"
+            }
+        ]
+    },
+    "4035903011095": {
+        "name": "Wiesentahler Grapefruidlimo (12x0,7l))",
+        "alias": ["grapelimo", "grapefruitlimo", "grapefruitlimonade"],
+        "price": 5.7,
+        "dependencies": [
+            {
+                "id": "kasten_sprudel"
+            }
+        ]
+    },
+    "4035903006091": {
+        "name": "Wiesentahler Apfelschorle (12x0,7l))",
+        "alias": ["aschorle", "apfelschorle"],
+        "price": 6.2,
+        "dependencies": [
+            {
+                "id": "kasten_sprudel"
+            }
+        ]
+    },
+    "4035903013099": {
+        "name": "Wiesentahler ColaMix (12x0,7l))",
+        "alias": ["colamix"],
+        "price": 5.3,
+        "dependencies": [
+            {
+                "id": "kasten_sprudel"
+            }
+        ]
+    },
+    "4021375003782": {
+        "name": "Orangensaft (6x1l)",
+        "alias": ["oldorange", "altorange"],
+        "price": 6.5,
+        "dependencies": [
+            {
+                "id": "kasten_saft"
+            }
+        ]
+    },
+    "kasten_apfel": {
+        "name": "Apfelsaft (6x1l)",
+        "alias": ["altapfel", "oldapple"],
+        "price": 4.7,
+        "dependencies": [
+            {
+                "id": "kasten_saft"
+            }
+        ]
+    },
+    "flasche_cola": {
+        "name": "Colaflasche",
+        "alias": ["colaflasche"],
+        "price": 0.15
+    },
+    "flasche_sprudel": {
+        "name": "Sprudelflasche 0,7l",
+        "alias": ["sprudelflasche"],
+        "price": 0.08
+    },
     "flasche_saft": {
-        "alias": [
-            "w39"
-        ], 
-        "price": 0.15, 
-        "name": "Saftflasche 1l"
+        "name": "Saftflasche 1l",
+        "alias": ["saftflasche"],
+        "price": 0.15
+    },
+    "fass": {
+        "name": "Fasspfand",
+        "price": 30
     }
 }

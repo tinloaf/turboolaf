@@ -1,26 +1,46 @@
 #!/usr/bin/env python3
 
+import copy
 import json
 import time
 import datetime
-import curses
-import curses.textpad
 import optparse
-import sys
 import os
+import sys
+import curses
 import string
 
 from decimal import Decimal
 import uuid
 
+
+# Check that there is no product anymore that depends on this product
+def product_dependencies_resolvable(invoice, code):
+    for c, product in invoice.items():
+        for dep in product.get('dependencies', []):
+            if dep['id'] == code:
+                return False
+    return True
+
 def resolve_invoice_dependencies(invoice):
-    # TODO: be filled by xhochy
+    invoice = copy.deepcopy(invoice)
+    changes = 1
+    while changes > 0:
+        changes = 0
+        for code, product in invoice.items():
+            if not product_dependencies_resolvable(invoice, code):
+                continue
+            for dependency in product.get('dependencies', []):
+                changes += 1
+                invoice[dependency['id']]['quantity'] += product['quantity'] * dependency.get('quantity', 1)
+            invoice[code]["dependencies"] = []
     return invoice
 
 def get_total_price(invoice):
+    invoice = resolve_invoice_dependencies(invoice)
     total_price = Decimal(0)
     for code, product in invoice.items():
-        billed_price = Decimal(str(product["price"])) * Decimal(str(product["quantity"]))
+        billed_price = Decimal(str(product.get('price', 0))) * Decimal(str(product.get('quantity')))
         total_price += billed_price
     return total_price
 
@@ -199,7 +219,7 @@ def init_screen():
     update_screen("Welcome to TurboOlaf!")
 
 ### END OF UI OPERATIONS ###
-    
+
 def get_invoice_ascii(invoice, width=60):
     invoice_string = ""
     invoice_string += "*" * width + "\n"
@@ -209,9 +229,10 @@ def get_invoice_ascii(invoice, width=60):
     invoice_string += "*" * width + "\n\n"
 
     for code, product in invoice.items():
-        if product["quantity"] > 0:
-            billed_price = Decimal(str(product["price"])) * Decimal(str(product["quantity"]))
-            billing_string = str(product["price"]).rjust(5) + \
+        price = Decimal(str(product.get('price', 0)))
+        if product["quantity"] != 0 and price != 0:
+            billed_price = price * Decimal(str(product["quantity"]))
+            billing_string = str(price).rjust(5) + \
                     str(" x " + str(product["quantity"])).rjust(6) + \
                     " = " + \
                     str(billed_price).rjust(6)
@@ -224,6 +245,25 @@ def get_invoice_ascii(invoice, width=60):
 
     return invoice_string
 
+def get_entered_items_ascii(invoice):
+    entered_items_string = ""
+    for code, product in invoice.items():
+        if product["quantity"] != 0:
+            entered_items_string += str(product["quantity"]).rjust(4) + " x " + product["name"] + "\n"
+    entered_items_string += "Total: " + str(get_total_price(invoice))
+    return entered_items_string
+
+def get_product_code(invoice, code):
+    try:
+        invoice[code]
+        return code
+    except KeyError:
+        pass
+    for codename, product in invoice.items():
+        if code in product.get('alias', []):
+            return codename
+    return None
+
 # add a --file argument and parse the arguments
 parser = optparse.OptionParser()
 parser.add_option("-f", "--file", dest = "filename", help = "load invoice from SOURCE", metavar = "SOURCE")
@@ -235,22 +275,26 @@ if options.filename:
 else:
     invoice = json.load(open("invoice_prototype.olaf"))
 
-print("Welcome to TurboOlaf!")
-
 #TODO: Maybe make this unique...?
 invoice_id = str(int(time.time()))
 
 # set the quantity of all products to 0
-print(invoice)
+#print(invoice)
 for code, product in invoice.items():
     product["quantity"] = 0
 
 init_screen()
-    
 previous_product_code = None
 while True:
-    (entered, break_ch) = get_input("+-", [curses.KEY_UP, curses.KEY_DOWN])
+    try:
+        (entered, break_ch) = get_input("+-", [curses.KEY_UP, curses.KEY_DOWN])
+    except EOFError:
+        break
+    except KeyboardInterrupt:
+        print("\nCaught SIGINT, exiting...\n")
+        sys.exit(1)
 
+    # end if an input was given
     if break_ch == ord('\n'):    
         # end if an input was given
         if not entered:
@@ -261,52 +305,55 @@ while True:
                 try:
                     special_product = {}
                     special_id = str(uuid.uuid4())
+                    invoice[special_id]['quantity'] = 0
                     update_product(special_id, 1)
-                    #invoice[special_id]['quantity'] = 1
                     try:
                         special_name = entered[1:].split(' ')[1]
                     except IndexError:
                         special_name = "Sonderposten"
-                        special_product['name'] = special_name
-                        special_product['price'] = Decimal(entered[1:].split(' ')[0])
-                        previous_product_code = special_id
-                # only if nothing of the above failed, write the above
-                        invoice.update({
-                                special_id: special_product
-                                })
+                    special_product['name'] = special_name
+                    special_product['price'] = Decimal(entered[1:].split(' ')[0])
+                    previous_product_code = special_id
+                    # only if nothing of the above failed, write the above
+                    invoice.update({
+                            special_id: special_product
+                            })
                 except:
                     update_screen("Invalid Sonderposten format!")
             else:
                 # the input is not a Sonderposten
                 if entered[0] in string.ascii_letters:
+                    code = get_product_code(invoice, entered)
                     # the input starts with a letter and will be followed by a product id
-                    previous_product_code = None
-                    for code, product in invoice.items():
-                        if code == entered[1:]:
+                    if not code:
+                        update_screen("Invalid product code " + entered[1:] + " entered")
+                    else:
+                        previous_product_code = code
+                        update_screen("Entered " + invoice[code]["name"])
+                        update_product(code, 1)
+                else:
+                    if len(entered) >= 8:
+                        # a code was scanned
+                        code = get_product_code(invoice, entered)
+                        # the input starts with a letter and will be followed by a product id
+                        if not code:
+                            update_screen("Invalid product code " + entered[1:] + " entered")
+                        else:
                             previous_product_code = code
                             update_product(code, 1)
-                            update_screen("Added " + invoice[code]["name"])
-                    if not previous_product_code:                    
-                        update_screen("Invalid product code " + entered[1:] + " entered")
-                else:
-                    if len(entered) > 10:
-                        # a code was scanned
-                        for code, product in invoice.items():
-                            if code == entered:
-                                previous_product_code = code
-                                update_product(code, 1)
-                                update_screen("Scanned " + invoice[code]["name"])
-                            
+                            update_screen("Scanned " + invoice[code]["name"])
                     else:
                         # a quantity was entered
                         if previous_product_code:
                             try:
-                                update_product(previous_product_code, int(entered) - 1)
+                                update_product(previous_product_code, (int(entered) - 1))
                                 update_screen("Added another " + str(int(entered) - 1) + " " + invoice[previous_product_code]["name"])
+                                previous_product_code = None
                             except ValueError:
                                 update_screen("No valid quantity entered")
                         else:
                             update_screen("No previous product entered!")
+
     else: # Hardcore shortcut action
         if (entered == None): # CTRL-Sequence
             if (break_ch == 65) or (break_ch == 66): # Up, Down
@@ -328,7 +375,7 @@ while True:
             
 curses.endwin()
 
-print(get_invoice_ascii(invoice))
+print(get_invoice_ascii(resolve_invoice_dependencies(invoice)))
 
 # TODO: write this out in a sorted manner e.g. yyyy/mm/dd/id.olaf
 invoice_file = open("invoices/" + invoice_id + ".json", 'w')
